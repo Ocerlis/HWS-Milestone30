@@ -22,7 +22,12 @@ struct ContentView: View {
     @State private var questionAmount = [5, 10, 20]
     @State private var showInput = false
     @State private var playerAnswer: Int?
+    @State private var playerScore = 0
+    @State private var answeredQuestions = 0
+    
     private func startGame() {
+        answeredQuestions = 0
+        playerScore = 0
         questionList.removeAll()
         var generatedQuestions = 0
         while generatedQuestions < questionAmountPick {
@@ -40,11 +45,21 @@ struct ContentView: View {
         if checkingNumber == questionList.first?.value ?? 0 {
             print("Answer was right")
             questionList.remove(at: questionList.startIndex)
+            answeredQuestions += 1
+            playerScore += 1
         } else {
             print("Answer is not right")
             questionList.remove(at: questionList.startIndex)
+            answeredQuestions += 1
+        }
+        
+        if answeredQuestions == questionAmountPick {
+            print("Game has ended")
+            startGame()
+            return
         }
         print("\(questionList.first!.key)")
+        print("Answered questions: \(answeredQuestions) / \(questionAmountPick) ")
     }
     
     var body: some View {
