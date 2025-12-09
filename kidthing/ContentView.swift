@@ -16,13 +16,12 @@ struct ContentView: View {
         }
     }
     @State private var questionList = [String : Int]()
-    @State private var questionTableOne = [2, 3, 4, 5, 6, 7, 8, 9, 10]
-    @State private var questionTableTwo = [2, 3, 4, 5, 6, 7, 8, 9, 10]
     @State private var questionStartLimitPick = 2
     @State private var questionLimitPick = 2
     @State private var questionAmountPick = 5
     @State private var questionAmount = [5, 10, 20]
-    
+    @State private var showInput = false
+    @State private var playerAnswer: Int?
     private func startGame() {
         questionList.removeAll()
         var generatedQuestions = 0
@@ -34,6 +33,16 @@ struct ContentView: View {
                         generatedQuestions += 1
             }
         }
+    }
+    
+    private func gameProcess(checkingNumber: Int) {
+        var checkingQuestion: Int
+        if let questionToCheck = questionList.first(where: { $0.value == checkingNumber })?.key {
+            checkingQuestion = Int(questionToCheck.split(separator: " ")[0]) ?? 0
+        } else {
+            checkingQuestion = 0
+        }
+        let alert: Alert
     }
     
     var body: some View {
@@ -64,11 +73,19 @@ struct ContentView: View {
                         questionLimitPick = newValue
                     }
                 }
-             
-                Button("Start test") {
-                    startGame()
+            }
+            Button("Start new test") {
+                startGame()
+                if showInput == false {
+                    showInput.toggle()
+                } else {
+                    playerAnswer = 0
                 }
-                
+            }
+            if showInput {
+                Section("Answer") {
+                    TextField("Input answer here", value: $playerAnswer, format: .number).keyboardType(.numberPad)
+                }
             }
         }
     }
