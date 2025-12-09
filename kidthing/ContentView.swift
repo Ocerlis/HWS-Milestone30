@@ -33,16 +33,18 @@ struct ContentView: View {
                         generatedQuestions += 1
             }
         }
+        print("\(questionList.first!.key)")
     }
     
     private func gameProcess(checkingNumber: Int) {
-        var checkingQuestion: Int
-        if let questionToCheck = questionList.first(where: { $0.value == checkingNumber })?.key {
-            checkingQuestion = Int(questionToCheck.split(separator: " ")[0]) ?? 0
+        if checkingNumber == questionList.first?.value ?? 0 {
+            print("Answer was right")
+            questionList.remove(at: questionList.startIndex)
         } else {
-            checkingQuestion = 0
+            print("Answer is not right")
+            questionList.remove(at: questionList.startIndex)
         }
-        let alert: Alert
+        print("\(questionList.first!.key)")
     }
     
     var body: some View {
@@ -84,7 +86,9 @@ struct ContentView: View {
             }
             if showInput {
                 Section("Answer") {
-                    TextField("Input answer here", value: $playerAnswer, format: .number).keyboardType(.numberPad)
+                    TextField("Input answer here", value: $playerAnswer, format: .number).keyboardType(.numberPad).onSubmit {
+                        gameProcess(checkingNumber: playerAnswer ?? 0)
+                    }
                 }
             }
         }
