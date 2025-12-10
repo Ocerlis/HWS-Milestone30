@@ -101,16 +101,20 @@ struct ContentView: View {
                 }
             }
             if showInput {
+                Section {
+                    Text("""
+                         Questions answered
+                         \(answeredQuestions) / \(questionAmountLimit)
+                         """).frame(maxWidth: .infinity).multilineTextAlignment(.center)
+                }
+                
                 Section("Answer") {
                     TextField("Input answer here", value: $playerAnswer, format: .number).keyboardType(.numberPad).onSubmit {
                         gameProcess(checkingNumber: playerAnswer ?? 0)
                     }
                 }
+                
             }
-        }
-        if showInput {
-            Text("Questions answered")
-            Text("\(answeredQuestions) / \(questionAmountLimit)")
         }
     }
 }
