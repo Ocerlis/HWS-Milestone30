@@ -25,13 +25,14 @@ struct ContentView: View {
     @State private var playerScore = 0
     @State private var answeredQuestions = 0
     @State private var questionAmountLimit = 5
+    @State private var finishedAlert = false
     private func startGame() {
         questionAmountLimit = questionAmountPick
         answeredQuestions = 0
         playerScore = 0
         questionList.removeAll()
         var generatedQuestions = 0
-        while generatedQuestions < questionAmountPick {
+        while generatedQuestions <= questionAmountLimit {
             let addedQuestion = Question(firstNumber: Int.random(in: questionStartLimitPick...questionLimitPick + 1), secondNumber: Int.random(in: questionStartLimitPick...questionLimitPick))
             let keyToCheck = ("\(addedQuestion.firstNumber) x \(addedQuestion.secondNumber)")
             if questionList[keyToCheck] == nil {
@@ -43,24 +44,23 @@ struct ContentView: View {
     }
     
     private func gameProcess(checkingNumber: Int) {
-        if checkingNumber == questionList.first?.value ?? 0 {
-            print("Answer was right")
-            questionList.remove(at: questionList.startIndex)
-            answeredQuestions += 1
-            playerScore += 1
-        } else {
-            print("Answer is not right")
-            questionList.remove(at: questionList.startIndex)
-            answeredQuestions += 1
-        }
-        
-        if answeredQuestions == questionLimitPick {
+        if answeredQuestions == questionAmountLimit - 1 {
             print("Game has ended")
+            finishedAlert = true
             startGame()
             return
         }
-        print("\(questionList.first!.key)")
-        print("Answered questions: \(answeredQuestions) / \(questionLimitPick) ")
+    
+        if checkingNumber == questionList.first?.value ?? 0 {
+            print("Answer was right")
+            answeredQuestions += 1
+            playerScore += 1
+            questionList.remove(at: questionList.startIndex)
+        } else {
+            print("Answer is not right")
+            answeredQuestions += 1
+            questionList.remove(at: questionList.startIndex)
+        }
     }
     
     var body: some View {
@@ -105,6 +105,15 @@ struct ContentView: View {
                     Text("""
                          Questions answered
                          \(answeredQuestions) / \(questionAmountLimit)
+                         """).frame(maxWidth: .infinity).multilineTextAlignment(.center)
+                }.alert("You're finished!", isPresented: $finishedAlert) {
+                    Button("Start over", role: .cancel) { }
+                }
+                
+                Section {
+                    Text("""
+                         Question:
+                         \(questionList.first?.key ?? "You finished!")?
                          """).frame(maxWidth: .infinity).multilineTextAlignment(.center)
                 }
                 
