@@ -24,8 +24,9 @@ struct ContentView: View {
     @State private var playerAnswer: Int?
     @State private var playerScore = 0
     @State private var answeredQuestions = 0
-    
+    @State private var questionAmountLimit = 5
     private func startGame() {
+        questionAmountLimit = questionAmountPick
         answeredQuestions = 0
         playerScore = 0
         questionList.removeAll()
@@ -53,13 +54,13 @@ struct ContentView: View {
             answeredQuestions += 1
         }
         
-        if answeredQuestions == questionAmountPick {
+        if answeredQuestions == questionLimitPick {
             print("Game has ended")
             startGame()
             return
         }
         print("\(questionList.first!.key)")
-        print("Answered questions: \(answeredQuestions) / \(questionAmountPick) ")
+        print("Answered questions: \(answeredQuestions) / \(questionLimitPick) ")
     }
     
     var body: some View {
@@ -106,6 +107,10 @@ struct ContentView: View {
                     }
                 }
             }
+        }
+        if showInput {
+            Text("Questions answered")
+            Text("\(answeredQuestions) / \(questionAmountLimit)")
         }
     }
 }
