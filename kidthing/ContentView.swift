@@ -73,8 +73,6 @@ struct ContentView: View {
             startGame()
             return
         }
-    
-
     }
     
     var body: some View {
@@ -87,7 +85,7 @@ struct ContentView: View {
                 }.pickerStyle(.segmented)
                 
                 Picker("Start difficulty", selection: $questionStartLimitPick) {
-                    ForEach(2 ..< 11) {
+                    ForEach(2 ..< 11, id: \.self) {
                         Text("\($0)").disabled($0 > questionLimitPick)
                     }
                 }.onChange(of: questionLimitPick) { oldValue, newValue in
@@ -97,7 +95,7 @@ struct ContentView: View {
                 }
                 
                 Picker("Difficulty limit", selection: $questionLimitPick) {
-                    ForEach(2 ..< 11) {
+                    ForEach(2..<11, id: \.self) {
                         Text("\($0)").disabled($0 < questionStartLimitPick)
                     }
                 }.onChange(of: questionStartLimitPick) { oldValue, newValue in
