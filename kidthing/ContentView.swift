@@ -15,6 +15,7 @@ struct ContentView: View {
             firstNumber * secondNumber
         }
     }
+    
     @State private var questionList = [String : Int]()
     @State private var questionStartLimitPick = 2
     @State private var questionLimitPick = 2
@@ -25,7 +26,9 @@ struct ContentView: View {
     @State private var playerScore = 0
     @State private var answeredQuestions = 0
     @State private var questionAmountLimit = 5
-    @State private var finishedAlert = false
+    @State private var perfectResultAlert = false
+    @State private var goodResultAlert = false
+    @State private var badResultAlert = false
     private func startGame() {
         questionAmountLimit = questionAmountPick
         answeredQuestions = 0
@@ -44,13 +47,7 @@ struct ContentView: View {
     }
     
     private func gameProcess(checkingNumber: Int) {
-        if answeredQuestions == questionAmountLimit - 1 {
-            print("Game has ended")
-            finishedAlert = true
-            startGame()
-            return
-        }
-    
+        
         if checkingNumber == questionList.first?.value ?? 0 {
             print("Answer was right")
             answeredQuestions += 1
@@ -61,6 +58,23 @@ struct ContentView: View {
             answeredQuestions += 1
             questionList.remove(at: questionList.startIndex)
         }
+        
+        if answeredQuestions == questionAmountLimit {
+            print("Game has ended")
+            
+            if playerScore == questionAmountLimit {
+                perfectResultAlert = true
+            } else if playerScore > (questionAmountLimit / 2) {
+                goodResultAlert = true
+            } else {
+                badResultAlert = true
+            }
+            
+            startGame()
+            return
+        }
+    
+
     }
     
     var body: some View {
@@ -106,8 +120,8 @@ struct ContentView: View {
                          Questions answered
                          \(answeredQuestions) / \(questionAmountLimit)
                          """).frame(maxWidth: .infinity).multilineTextAlignment(.center)
-                }.alert("You're finished!", isPresented: $finishedAlert) {
-                    Button("Start over", role: .cancel) { }
+                }.alert("You're perfect!", isPresented: $perfectResultAlert) {
+                    Button("Start new test", role: .cancel) { }
                 }
                 
                 Section {
@@ -115,12 +129,16 @@ struct ContentView: View {
                          Question:
                          \(questionList.first?.key ?? "You finished!")?
                          """).frame(maxWidth: .infinity).multilineTextAlignment(.center)
+                }.alert("You're getting good!", isPresented: $goodResultAlert) {
+                    Button("Start new test", role: .cancel) { }
                 }
                 
                 Section("Answer") {
                     TextField("Input answer here", value: $playerAnswer, format: .number).keyboardType(.numberPad).onSubmit {
                         gameProcess(checkingNumber: playerAnswer ?? 0)
                     }
+                }.alert("You're result is bad, keep trying!", isPresented: $badResultAlert) {
+                    Button("Start new test", role: .cancel) { }
                 }
                 
             }
