@@ -29,6 +29,7 @@ struct ContentView: View {
     @State private var perfectResultAlert = false
     @State private var goodResultAlert = false
     @State private var badResultAlert = false
+    @State private var checkLastQuestion = "questionmark.app.fill"
     private func startGame() {
         questionAmountLimit = questionAmountPick
         answeredQuestions = 0
@@ -114,6 +115,11 @@ struct ContentView: View {
             }
             if showInput {
                 Section {
+                    HStack {
+                        Spacer()
+                        Image(systemName: checkLastQuestion).resizable().scaledToFit().frame(width: 50, height: 50)
+                        Spacer()
+                    }.listRowSeparator(.hidden)
                     Text("""
                          Questions answered
                          \(answeredQuestions) / \(questionAmountLimit)
