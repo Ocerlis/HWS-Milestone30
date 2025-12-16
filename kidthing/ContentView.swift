@@ -51,11 +51,13 @@ struct ContentView: View {
         
         if checkingNumber == questionList.first?.value ?? 0 {
             print("Answer was right")
+            checkLastQuestion = "checkmark.square.fill"
             answeredQuestions += 1
             playerScore += 1
             questionList.remove(at: questionList.startIndex)
         } else {
             print("Answer is not right")
+            checkLastQuestion = "multiply.square.fill"
             answeredQuestions += 1
             questionList.remove(at: questionList.startIndex)
         }
