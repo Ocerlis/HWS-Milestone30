@@ -1,1 +1,7 @@
-This is a project from Hacking With Swift: an app, created to help children learn multiplication table. Not feature/design complete, but it works!
+Андрей Поль МПБ-301
+
+Проект, помогающий детям учить таблицу умножения. Не полностью совершеннен в плане дизайна или фич, но базовый функционал/цикл работы работает!
+
+Стек:
+- Swift
+- SwiftUI
