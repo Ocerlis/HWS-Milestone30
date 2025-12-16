@@ -30,6 +30,8 @@ struct ContentView: View {
     @State private var goodResultAlert = false
     @State private var badResultAlert = false
     @State private var checkLastQuestion = "questionmark.app.fill"
+    @State private var colorOfQuestionSymbol = false
+    @State private var questionAnswered = false
     private func startGame() {
         questionAmountLimit = questionAmountPick
         answeredQuestions = 0
@@ -48,15 +50,17 @@ struct ContentView: View {
     }
     
     private func gameProcess(checkingNumber: Int) {
-        
+        questionAnswered = true
         if checkingNumber == questionList.first?.value ?? 0 {
             print("Answer was right")
+            colorOfQuestionSymbol = true
             checkLastQuestion = "checkmark.square.fill"
             answeredQuestions += 1
             playerScore += 1
             questionList.remove(at: questionList.startIndex)
         } else {
             print("Answer is not right")
+            colorOfQuestionSymbol = false
             checkLastQuestion = "multiply.square.fill"
             answeredQuestions += 1
             questionList.remove(at: questionList.startIndex)
@@ -117,11 +121,13 @@ struct ContentView: View {
             }
             if showInput {
                 Section {
-                    HStack {
-                        Spacer()
-                        Image(systemName: checkLastQuestion).resizable().scaledToFit().frame(width: 50, height: 50)
-                        Spacer()
-                    }.listRowSeparator(.hidden)
+                    if questionAnswered {
+                        HStack {
+                            Spacer()
+                            Image(systemName: checkLastQuestion).resizable().scaledToFit().frame(width: 50, height: 50).foregroundStyle(colorOfQuestionSymbol && (checkLastQuestion == "checkmark.square.fill" || checkLastQuestion == "multiply.square.fill") ? Color.green : Color.red)
+                            Spacer()
+                        }.listRowSeparator(.hidden)
+                    }
                     Text("""
                          Questions answered
                          \(answeredQuestions) / \(questionAmountLimit)
